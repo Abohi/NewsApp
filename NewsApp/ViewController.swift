@@ -9,7 +9,7 @@
 //Api Caller
 //Open the News Story
 //Search for news
-//d4a3cbe992474b258d51b4a7761679eb
+//
 import UIKit
 
 class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSource{
