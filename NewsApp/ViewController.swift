@@ -11,7 +11,7 @@
 //Search for news
 //
 import UIKit
-
+import SafariServices
 class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSource{
     
     private let tableView: UITableView={
@@ -20,7 +20,7 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
         return table;
     }()
     private var viewModels=[NewsTableViewCellViewModel]()
-    
+    private var articles=[Article]()
     override func viewDidLoad() {
         super.viewDidLoad()
         title="News"
@@ -31,8 +31,9 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
         APICaller.shared.getTopStories { [weak self] result in
             switch result{
             case .success(let response):
+                self?.articles=response
                 self?.viewModels = response.compactMap({
-                    NewsTableViewCellViewModel(title: $0.title, subtitle:$0.description, imageURL: URL(string: $0.urlToImage))
+                    NewsTableViewCellViewModel(title: $0.title, subtitle:$0.description ?? "", imageURL: URL(string: $0.urlToImage ?? ""))
                 })
                 DispatchQueue.main.async {
                     self?.tableView.reloadData()
@@ -62,7 +63,16 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let article=articles[indexPath.row]
+        guard let url = URL(string: article.url ?? "")else{
+            return
+        }
+        
+        let viewC = SFSafariViewController(url: url)
+        present(viewC, animated: true)
     }
-
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 150
+    }
 }
 

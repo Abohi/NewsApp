@@ -9,7 +9,7 @@ import Foundation
 final class APICaller{
     static let shared=APICaller()
     struct Constants{
-        static let topHeadLinesUrl=URL(string:"https://newsapi.org/v2/top-headlines?country=us&apiKey=")
+        static let topHeadLinesUrl=URL(string:"https://newsapi.org/v2/top-headlines?country=us&apiKey=d4a3cbe992474b258d51b4a7761679eb")
     }
     private init(){}
     public func getTopStories(completion:@escaping(Result<[Article],Error>)->Void){
@@ -41,9 +41,9 @@ struct APIResponse:Codable{
 struct Article:Codable{
     let source:Source
     let title:String
-    let description:String
-    let url:String
-    let urlToImage:String
+    let description:String?
+    let url:String?
+    let urlToImage:String?
     let publishedAt:String
     
 }
